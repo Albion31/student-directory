@@ -36,7 +36,21 @@ def print_first_letter(students)
       students_first_letter << student
     end
   end
-  puts "We have #{students_first_letter.count} students whose name start with \"#{first_letter}\"."
+  puts "We have #{students_first_letter.count} students whose name starts with \"#{first_letter}\"."
+end
+
+def print_shorter_name(students)
+  puts "How many characters would you like to filter the students name by?"
+  characters = gets.chomp.to_i
+  students_shorter_name = []
+
+  students.each_with_index do |student, index|
+    if student[:name].length < characters
+      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
+      students_shorter_name << student
+    end
+  end
+  puts "We have #{students_shorter_name.count} students whose name is shorter than #{characters} characters."
 end
 
 def print_footer(students)
@@ -46,5 +60,6 @@ end
 students = input_students
 print_header
 # print(students)
-print_first_letter(students)
+# print_first_letter(students)
+print_shorter_name(students)
 print_footer(students)

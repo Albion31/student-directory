@@ -68,13 +68,10 @@ def print(students)
   end
   if filter == "no"
     index = 0
+
     until index == students.length
-      puts "#{index + 1}. #{students[index][:name]} (#{students[index][:cohort]} cohort).".center(line_height)
-      puts "Country: #{students[index][:country]}.".center(line_height)
-      puts "Hobby: #{students[index][:hobby]}.".center(line_height)
-      puts "Height (in metres): #{students[index][:height]}.".center(line_height)
-      puts "Colour: #{students[index][:colour]}.".center(line_height)
-      puts ""
+      student = students[index]
+      output(student, index)
       index += 1
     end
   elsif filter == "yes"
@@ -92,12 +89,7 @@ def print(students)
 
         students.each_with_index do |student, index|
           if student[:name].downcase.start_with?("#{first_letter}")
-            puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)".center(line_height)
-            puts "Country: #{student[:country]}.".center(line_height)
-            puts "Hobby: #{student[:hobby]}.".center(line_height)
-            puts "Height (in metres): #{student[:height]}.".center(line_height)
-            puts "Colour: #{student[:colour]}.".center(line_height)
-            puts ""
+            output(student, index)
             students_first_letter << student
           end
         end
@@ -113,12 +105,7 @@ def print(students)
 
         students.each_with_index do |student, index|
           if student[:name].length < characters
-            puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)".center(line_height)
-            puts "Country: #{student[:country]}.".center(line_height)
-            puts "Hobby: #{student[:hobby]}.".center(line_height)
-            puts "Height (in metres): #{student[:height]}.".center(line_height)
-            puts "Colour: #{student[:colour]}.".center(line_height)
-            puts ""
+            output(student, index)
             students_shorter_name << student
           end
         end
@@ -140,12 +127,7 @@ def print(students)
       cohort_members = []
       students.each_with_index do |student, index|
         if student[:cohort] == cohort_filter.capitalize.to_sym
-          puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)".center(line_height)
-          puts "Country: #{student[:country]}.".center(line_height)
-          puts "Hobby: #{student[:hobby]}.".center(line_height)
-          puts "Height (in metres): #{student[:height]}.".center(line_height)
-          puts "Colour: #{student[:colour]}.".center(line_height)
-          puts ""
+          output(student, index)
           cohort_members << student
         end
       end
@@ -156,6 +138,16 @@ def print(students)
       end
     end
   end
+end
+
+def output(student, index)
+  line_height = 70
+  puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort).".center(line_height)
+  puts "Country: #{student[:country]}.".center(line_height)
+  puts "Hobby: #{student[:hobby]}.".center(line_height)
+  puts "Height (in metres): #{student[:height]}.".center(line_height)
+  puts "Colour: #{student[:colour]}.".center(line_height)
+  puts ""
 end
 
 def print_footer(students)

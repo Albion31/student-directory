@@ -10,7 +10,7 @@ def input_students
     puts "What is the student's cohort month?"
     cohort = gets.chomp.capitalize
       while !cohort_month.include?(cohort.capitalize)
-        puts "Please enter a valid cohort month. The valid inputs are #{cohort_month}."
+        puts "Please enter a valid cohort month. The valid inputs are #{cohort_month.join(", ")}."
         cohort = gets.chomp.capitalize
       end
     puts "What is the student's country of birth?"
@@ -55,50 +55,92 @@ def print_header
 end
 
 def print(students)
-  students.each_with_index do |student, index|
-    puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-  end
-end
-
-def print_until(students)
-  index = 0
   line_height = 70
-  until index == students.length
-    puts "#{index + 1}. #{students[index][:name]} (#{students[index][:cohort]} cohort).".center(line_height)
-    puts "Country: #{students[index][:country]}.".center(line_height)
-    puts "Hobby: #{students[index][:hobby]}.".center(line_height)
-    puts "Height (in metres): #{students[index][:height]}.".center(line_height)
-    puts "Colour: #{students[index][:colour]}.".center(line_height)
-    index += 1
+  puts "Do you want to filter the list of students?"
+  filter = gets.chomp
+  while filter != "yes" && filter != "no"
+    puts "Please answer yes or no"
+    filter = gets.chomp
   end
-end
+  if filter == "no"
+    index = 0
+    until index == students.length
+      puts "#{index + 1}. #{students[index][:name]} (#{students[index][:cohort]} cohort).".center(line_height)
+      puts "Country: #{students[index][:country]}.".center(line_height)
+      puts "Hobby: #{students[index][:hobby]}.".center(line_height)
+      puts "Height (in metres): #{students[index][:height]}.".center(line_height)
+      puts "Colour: #{students[index][:colour]}.".center(line_height)
+      puts ""
+      index += 1
+    end
+  elsif filter == "yes"
+    puts "What would you like to fiter by?"
+    puts "Please choose between \"first letter\", \"name length\" or \"cohort\""
+    filter_by = gets.chomp
+    while filter_by != "first letter" && filter_by != "name length" && filter_by != "cohort"
+      puts "Please put choose between \"first letter\", \"name length\" or \"cohort\""
+      filter_by = gets.chomp
+    end
+      if filter_by == "first letter"
+        puts "Which letter would you like to filter the students name by?"
+        first_letter = gets.chomp.downcase
+        students_first_letter = []
 
-def print_first_letter(students)
-  puts "Which letter would you like to filter the students name by?"
-  first_letter = gets.chomp.downcase
-  students_first_letter = []
+        students.each_with_index do |student, index|
+          if student[:name].downcase.start_with?("#{first_letter}")
+            puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)".center(line_height)
+            puts "Country: #{student[:country]}.".center(line_height)
+            puts "Hobby: #{student[:hobby]}.".center(line_height)
+            puts "Height (in metres): #{student[:height]}.".center(line_height)
+            puts "Colour: #{student[:colour]}.".center(line_height)
+            puts ""
+            students_first_letter << student
+          end
+        end
+        puts "We have #{students_first_letter.count} students whose name starts with \"#{first_letter}\"."
+    elsif filter_by == "name length"
+        puts "How many characters would you like to filter the students name by?"
+        characters = gets.chomp.to_i
+        students_shorter_name = []
 
-  students.each_with_index do |student, index|
-    if student[:name].downcase.start_with?("#{first_letter}")
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-      students_first_letter << student
+        students.each_with_index do |student, index|
+          if student[:name].length < characters
+            puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)".center(line_height)
+            puts "Country: #{student[:country]}.".center(line_height)
+            puts "Hobby: #{student[:hobby]}.".center(line_height)
+            puts "Height (in metres): #{student[:height]}.".center(line_height)
+            puts "Colour: #{student[:colour]}.".center(line_height)
+            puts ""
+            students_shorter_name << student
+          end
+        end
+        puts "We have #{students_shorter_name.count} students whose name is shorter than #{characters} characters."
+
+    elsif filter_by == "cohort"
+      cohort_month = ["January", "February", "March", "April",
+                      "May", "June", "July", "August",
+                      "September", "October", "November", "December"]
+      puts "What cohort month would you like?"
+      cohort_filter = gets.chomp.capitalize
+        while !cohort_month.include?(cohort_filter.capitalize)
+          puts "Please enter a valid cohort month. The valid inputs are #{cohort_month.join(", ")}."
+          cohort_filter = gets.chomp.capitalize
+        end
+      cohort_members = []
+      students.each_with_index do |student, index|
+        if student[:cohort] == cohort_filter.capitalize.to_sym
+          puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)".center(line_height)
+          puts "Country: #{student[:country]}.".center(line_height)
+          puts "Hobby: #{student[:hobby]}.".center(line_height)
+          puts "Height (in metres): #{student[:height]}.".center(line_height)
+          puts "Colour: #{student[:colour]}.".center(line_height)
+          puts ""
+          cohort_members << student
+        end
+      end
+      puts "We have #{cohort_members.count} students in the #{cohort_filter} cohort."
     end
   end
-  puts "We have #{students_first_letter.count} students whose name starts with \"#{first_letter}\"."
-end
-
-def print_shorter_name(students)
-  puts "How many characters would you like to filter the students name by?"
-  characters = gets.chomp.to_i
-  students_shorter_name = []
-
-  students.each_with_index do |student, index|
-    if student[:name].length < characters
-      puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort)"
-      students_shorter_name << student
-    end
-  end
-  puts "We have #{students_shorter_name.count} students whose name is shorter than #{characters} characters."
 end
 
 def print_footer(students)
@@ -107,8 +149,5 @@ end
 
 students = input_students
 print_header
-# print(students)
-# print_first_letter(students)
-# print_shorter_name(students)
-print_until(students)
+print(students)
 print_footer(students)

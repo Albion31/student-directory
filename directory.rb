@@ -1,24 +1,44 @@
 def input_students
   puts "Please enter the name of the first student."
-
-  name = gets.chomp
+  name = gets.chomp.capitalize
   students = []
 
   while !name.empty? do
+    cohort_month = ["January", "February", "March", "April",
+                    "May", "June", "July", "August",
+                    "September", "October", "November", "December"]
+    puts "What is the student's cohort month?"
+    cohort = gets.chomp.capitalize
+      while !cohort_month.include?(cohort.capitalize)
+        puts "Please enter a valid cohort month."
+        cohort = gets.chomp
+      end
     puts "What is the student's country of birth?"
-    country = gets.chomp
+    country = gets.chomp.capitalize
+      if country.empty?
+        country = "N/A"
+      end
     puts "What is the student's hobby?"
-    hobby = gets.chomp
+    hobby = gets.chomp.capitalize
+      if hobby.empty?
+        hobby = "N/A"
+      end
     puts "What is the student's height in metres?"
     height = gets.chomp
+      if height.empty?
+        height = "N/A"
+      end
     puts "What is the student's favourite colour?"
-    colour = gets.chomp
+    colour = gets.chomp.capitalize
+      if colour.empty?
+        colour = "N/A"
+      end
     students << {name: name,
                  country: country,
                  hobby: hobby,
                  height: height,
                  colour: colour,
-                 cohort: :november}
+                 cohort: cohort.to_sym}
     puts "Now we have #{students.count} students."
     puts "Please enter the name of the next student."
     puts "To finish, just hit return twice."

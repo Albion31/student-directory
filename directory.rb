@@ -25,6 +25,12 @@ def print(students)
   end
 end
 
+def print_loop(students)
+  while true
+    puts "#{students[:name]} (#{students[:cohort]} cohort)"
+  end
+end
+
 def print_first_letter(students)
   puts "Which letter would you like to filter the students name by?"
   first_letter = gets.chomp.downcase
@@ -53,6 +59,14 @@ def print_shorter_name(students)
   puts "We have #{students_shorter_name.count} students whose name is shorter than #{characters} characters."
 end
 
+def print_until(students)
+  index = 0
+  until index == students.length
+    puts "#{index + 1}. #{students[index][:name]} (#{students[index][:cohort]} cohort)"
+    index += 1
+  end
+end
+
 def print_footer(students)
   puts "Overall, we have #{students.count} great students."
 end
@@ -61,5 +75,7 @@ students = input_students
 print_header
 # print(students)
 # print_first_letter(students)
-print_shorter_name(students)
+# print_shorter_name(students)
+# print_loop(students)
+print_until(students)
 print_footer(students)

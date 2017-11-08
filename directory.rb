@@ -167,6 +167,6 @@ end
 end
 
 students = input_students
-print_header
-print(students)
-print_footer(students)
+students.count >= 1 ? print_header : nil
+students.count >= 1 ? print(students) : nil
+students.count >= 1 ? print_footer(students) : nil

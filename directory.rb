@@ -10,8 +10,8 @@ def input_students
     puts "What is the student's cohort month?"
     cohort = gets.chomp.capitalize
       while !cohort_month.include?(cohort.capitalize)
-        puts "Please enter a valid cohort month."
-        cohort = gets.chomp
+        puts "Please enter a valid cohort month. The valid inputs are #{cohort_month}."
+        cohort = gets.chomp.capitalize
       end
     puts "What is the student's country of birth?"
     country = gets.chomp.capitalize

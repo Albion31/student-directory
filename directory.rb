@@ -1,6 +1,6 @@
 def input_students
   puts "Please enter the name of the first student."
-  name = gets.chomp.capitalize
+  name = gets.capitalize.delete("\n")
   students = []
 
   while !name.empty? do

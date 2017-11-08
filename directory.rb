@@ -1,13 +1,28 @@
 def input_students
-  puts "Please enter the names fo the students"
-  puts "To finish, just hit return twice"
+  puts "Please enter the names of the students."
+  puts "To finish, just hit return twice."
 
-  students = []
   name = gets.chomp
+  students = []
+
 
   while !name.empty? do
-    students << {name: name, cohort: :november}
+    puts "What is the student's country of birth?"
+    country = gets.chomp
+    puts "What is the student's hobby?"
+    hobby = gets.chomp
+    puts "What is the student's height?"
+    height = gets.chomp
+    puts "What is the student's favourite colour?"
+    colour = gets.chomp
+    students << {name: name,
+                 country: country,
+                 hobby: hobby,
+                 height: height,
+                 colour: colour,
+                 cohort: :november}
     puts "Now we have #{students.count} students"
+    puts "Please enter the name of the next student."
     name = gets.chomp
   end
 
@@ -28,7 +43,11 @@ end
 def print_until(students)
   index = 0
   until index == students.length
-    puts "#{index + 1}. #{students[index][:name]} (#{students[index][:cohort]} cohort)"
+    puts "#{index + 1}. #{students[index][:name]} (#{students[index][:cohort]} cohort)."
+    puts "#{students[index][:name]} was born in #{students[index][:country]}."
+    puts "#{students[index][:name]}'s hobby is #{students[index][:hobby]}."
+    puts "#{students[index][:name]}'s height is #{students[index][:height]}."
+    puts "#{students[index][:name]}'s favourite colour is #{students[index][:colour]}."
     index += 1
   end
 end

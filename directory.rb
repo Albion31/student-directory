@@ -1,17 +1,15 @@
 def input_students
-  puts "Please enter the names of the students."
-  puts "To finish, just hit return twice."
+  puts "Please enter the name of the first student."
 
   name = gets.chomp
   students = []
-
 
   while !name.empty? do
     puts "What is the student's country of birth?"
     country = gets.chomp
     puts "What is the student's hobby?"
     hobby = gets.chomp
-    puts "What is the student's height?"
+    puts "What is the student's height in metres?"
     height = gets.chomp
     puts "What is the student's favourite colour?"
     colour = gets.chomp
@@ -21,8 +19,9 @@ def input_students
                  height: height,
                  colour: colour,
                  cohort: :november}
-    puts "Now we have #{students.count} students"
+    puts "Now we have #{students.count} students."
     puts "Please enter the name of the next student."
+    puts "To finish, just hit return twice."
     name = gets.chomp
   end
 
@@ -30,8 +29,9 @@ def input_students
 end
 
 def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
+  line_height = 70
+  puts "The students of Villains Academy".center(line_height)
+  puts "-------------".center(line_height)
 end
 
 def print(students)
@@ -42,12 +42,13 @@ end
 
 def print_until(students)
   index = 0
+  line_height = 70
   until index == students.length
-    puts "#{index + 1}. #{students[index][:name]} (#{students[index][:cohort]} cohort)."
-    puts "#{students[index][:name]} was born in #{students[index][:country]}."
-    puts "#{students[index][:name]}'s hobby is #{students[index][:hobby]}."
-    puts "#{students[index][:name]}'s height is #{students[index][:height]}."
-    puts "#{students[index][:name]}'s favourite colour is #{students[index][:colour]}."
+    puts "#{index + 1}. #{students[index][:name]} (#{students[index][:cohort]} cohort).".center(line_height)
+    puts "Country: #{students[index][:country]}.".center(line_height)
+    puts "Hobby: #{students[index][:hobby]}.".center(line_height)
+    puts "Height (in metres): #{students[index][:height]}.".center(line_height)
+    puts "Colour: #{students[index][:colour]}.".center(line_height)
     index += 1
   end
 end

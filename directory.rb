@@ -39,7 +39,11 @@ def input_students
                  height: height,
                  colour: colour,
                  cohort: cohort.to_sym}
-    puts "Now we have #{students.count} students."
+      if students.count <= 1
+        puts "Now we have #{students.count} student."
+      else
+        puts "Now we have #{students.count} students."
+      end
     puts "Please enter the name of the next student."
     puts "To finish, just hit return twice."
     name = gets.chomp
@@ -97,9 +101,13 @@ def print(students)
             students_first_letter << student
           end
         end
-        puts "We have #{students_first_letter.count} students whose name starts with \"#{first_letter}\"."
+          if students_first_letter.count <= 1
+            puts "We have #{students_first_letter.count} student whose name starts with \"#{first_letter}\"."
+          else
+            puts "We have #{students_first_letter.count} students whose name starts with \"#{first_letter}\"."
+          end
     elsif filter_by == "name length"
-        puts "How many characters would you like to filter the students name by?"
+        puts "How many characters would you like the student's name to be lower than?"
         characters = gets.chomp.to_i
         students_shorter_name = []
 
@@ -114,8 +122,11 @@ def print(students)
             students_shorter_name << student
           end
         end
-        puts "We have #{students_shorter_name.count} students whose name is shorter than #{characters} characters."
-
+        if students_shorter_name.count <= 1
+          puts "We have #{students_shorter_name.count} student whose name is shorter than #{characters} characters."
+        else
+          puts "We have #{students_shorter_name.count} students whose name is shorter than #{characters} characters."
+        end
     elsif filter_by == "cohort"
       cohort_month = ["January", "February", "March", "April",
                       "May", "June", "July", "August",
@@ -138,13 +149,21 @@ def print(students)
           cohort_members << student
         end
       end
-      puts "We have #{cohort_members.count} students in the #{cohort_filter} cohort."
+      if cohort_members.count <= 1
+        puts "We have #{cohort_members.count} student in the #{cohort_filter} cohort."
+      else
+        puts "We have #{cohort_members.count} students in the #{cohort_filter} cohort."
+      end
     end
   end
 end
 
 def print_footer(students)
-  puts "Overall, we have #{students.count} great students."
+  if students.count <= 1
+    puts "Overall, we have #{students.count} great student."
+  else
+    puts "Overall, we have #{students.count} great students."
+end
 end
 
 students = input_students

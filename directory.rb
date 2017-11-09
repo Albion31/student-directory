@@ -1,3 +1,26 @@
+def interactive_menu
+  students = []
+  loop do
+    puts "1. Input the students."
+    puts "2. Show the students."
+    puts "9. Exit."
+    selection = gets.chomp
+
+    case selection
+    when "1"
+      students = input_students
+    when "2"
+      print_header
+      print(students)
+      print_footer(students)
+    when "9"
+      exit
+    else
+      puts "I don't know what you meant, try again."
+    end
+  end
+end
+
 def input_students
   puts "Please enter the name of the first student."
   name = gets.capitalize.delete("\n")
@@ -158,7 +181,8 @@ def print_footer(students)
 end
 end
 
-students = input_students
-students.count >= 1 ? print_header : nil
-students.count >= 1 ? print(students) : nil
-students.count >= 1 ? print_footer(students) : nil
+# students = input_students
+# students.count >= 1 ? print_header : nil
+# students.count >= 1 ? print(students) : nil
+# students.count >= 1 ? print_footer(students) : nil
+interactive_menu

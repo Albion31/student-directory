@@ -1,5 +1,5 @@
 @students = []
-@line_height = 70
+@line_width = 70
 
 def interactive_menu
   loop do
@@ -11,6 +11,7 @@ end
 def print_menu
   puts "1. Input the students."
   puts "2. Show the students."
+  puts "3. Save the list to students.csv"
   puts "9. Exit."
 end
 
@@ -20,6 +21,8 @@ def process(selection)
       input_students
     when "2"
       show_students
+    when "3"
+      save_students
     when "9"
       exit
     else
@@ -31,6 +34,21 @@ def show_students
   print_header
   print_students_list
   print_footer
+end
+
+def save_students
+  file = File.open("students.csv", "w")
+  @students.each do |student|
+    student_data = [student[:name],
+                    student[:cohort],
+                    student[:country],
+                    student[:hobby],
+                    student[:height],
+                    student[:colour]]
+    csv_line = student_data.join(",")
+    file.puts(csv_line)
+  end
+  file.close
 end
 
 def input_students
@@ -68,11 +86,12 @@ def input_students
         colour = "N/A"
       end
     @students << {name: name,
-                 country: country,
-                 hobby: hobby,
-                 height: height,
-                 colour: colour,
-                 cohort: cohort.to_sym}
+                  cohort: cohort.to_sym,
+                  country: country,
+                  hobby: hobby,
+                  height: height,
+                  colour: colour
+                 }
     @students.count <= 1 ? number = "student" : number = "students"
     puts "Now we have #{@students.count} #{number}."
     puts "Please enter the name of the next student."
@@ -84,8 +103,8 @@ def input_students
 end
 
 def print_header
-  puts "The students of Villains Academy".center(@line_height)
-  puts "-------------".center(@line_height)
+  puts "The students of Villains Academy".center(@line_width)
+  puts "-------------".center(@line_width)
 end
 
 def print_students_list
@@ -161,11 +180,11 @@ def print_students_list
 end
 
 def output(student, index)
-  puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort).".center(@line_height)
-  puts "Country: #{student[:country]}.".center(@line_height)
-  puts "Hobby: #{student[:hobby]}.".center(@line_height)
-  puts "Height (in metres): #{student[:height]}.".center(@line_height)
-  puts "Colour: #{student[:colour]}.".center(@line_height)
+  puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort).".center(@line_width)
+  puts "Country: #{student[:country]}.".center(@line_width)
+  puts "Hobby: #{student[:hobby]}.".center(@line_width)
+  puts "Height (in metres): #{student[:height]}.".center(@line_width)
+  puts "Colour: #{student[:colour]}.".center(@line_width)
   puts ""
 end
 

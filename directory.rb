@@ -1,18 +1,10 @@
+@students = []
+@line_height = 70
+
 def interactive_menu
-  @students = []
   loop do
     print_menu
-    selection = gets.chomp
-    case selection
-      when "1"
-        @students = input_students
-      when "2"
-        show_students
-      when "9"
-        exit
-      else
-        puts "I don't know what you meant, try again."
-    end
+    process(gets.chomp)
   end
 end
 
@@ -22,16 +14,28 @@ def print_menu
   puts "9. Exit."
 end
 
+def process(selection)
+  case selection
+    when "1"
+      input_students
+    when "2"
+      show_students
+    when "9"
+      exit
+    else
+      puts "I don't know what you meant, try again."
+  end
+end
+
 def show_students
   print_header
-  print
+  print_students_list
   print_footer
 end
 
 def input_students
   puts "Please enter the name of the first student."
   name = gets.capitalize.delete("\n")
-  @students = []
 
   while !name.empty? do
     cohort_month = ["January", "February", "March", "April",
@@ -80,12 +84,11 @@ def input_students
 end
 
 def print_header
-  @line_height = 70
   puts "The students of Villains Academy".center(@line_height)
   puts "-------------".center(@line_height)
 end
 
-def print
+def print_students_list
   puts "Do you want to filter the list of students?"
   filter = gets.chomp
   while filter != "yes" && filter != "no"

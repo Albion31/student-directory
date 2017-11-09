@@ -44,7 +44,7 @@ def save_students
   @students.each do |student|
     student_data = [student[:name],
                     student[:cohort],
-                    student[:country],
+                    student[:nationality],
                     student[:hobby],
                     student[:height],
                     student[:colour]]
@@ -57,8 +57,8 @@ end
 def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
-    name, cohort, country, hobby, height, colour = line.chomp.split(",")
-    student_info(name, cohort, country, hobby, height, colour)
+    name, cohort, nationality, hobby, height, colour = line.chomp.split(",")
+    student_info(name, cohort, nationality, hobby, height, colour)
   end
   file.close
 end
@@ -78,48 +78,37 @@ def try_load_students
 end
 
 def input_students
-  puts "Please enter the name of the first student."
-  name = STDIN.gets.capitalize.delete("\n")
-
+  name = student_input("name").capitalize
   while !name.empty? do
     cohort_month = ["January", "February", "March", "April",
                     "May", "June", "July", "August",
                     "September", "October", "November", "December"]
-    puts "What is the student's cohort month?"
-    cohort = STDIN.gets.chomp.capitalize
+    cohort = student_input("cohort").capitalize
       while !cohort_month.include?(cohort.capitalize)
-        puts "Please enter a valid cohort month. The valid inputs are #{cohort_month.join(", ")}."
-        cohort = STDIN.gets.chomp.capitalize
+        puts "The valid inputs are #{cohort_month.join(", ")}."
+        cohort = student_input("cohort").capitalize
       end
-    puts "What is the student's country of birth?"
-    country = STDIN.gets.chomp.capitalize
-      if country.empty?
-        country = "N/A"
-      end
-    puts "What is the student's hobby?"
-    hobby = STDIN.gets.chomp.capitalize
-      if hobby.empty?
-        hobby = "N/A"
-      end
-    puts "What is the student's height in metres?"
-    height = STDIN.gets.chomp
-      if height.empty?
-        height = "N/A"
-      end
-    puts "What is the student's favourite colour?"
-    colour = STDIN.gets.chomp.capitalize
-      if colour.empty?
-        colour = "N/A"
-      end
-      student_info(name, cohort, country, hobby, height, colour)
+    nationality = student_input("nationality").capitalize
+    hobby = student_input("hobby").capitalize
+    height = student_input("height (in meters)")
+    colour = student_input("favourite colour").capitalize
+    student_info(name, cohort, nationality, hobby, height, colour)
     @students.count <= 1 ? number = "student" : number = "students"
-    puts "Now we have #{@students.count} #{number}."
-    puts "Please enter the name of the next student."
-    puts "To finish, just hit return twice."
+    puts "We now have #{@students.count} #{number}."
+    puts "Just hit return to finish, otherwise please enter the name of the next student."
     name = STDIN.gets.chomp
   end
 
   @students
+end
+
+def student_input(personal_info)
+  puts "Please enter the #{personal_info} of the student."
+  answer = STDIN.gets.chomp
+  if answer.empty?
+    answer = "Not given"
+  end
+  answer
 end
 
 def print_header
@@ -199,10 +188,10 @@ def print_students_list
   end
 end
 
-def student_info(name, cohort, country, hobby, height, colour)
+def student_info(name, cohort, nationality, hobby, height, colour)
     @students << {name: name,
                   cohort: cohort.to_sym,
-                  country: country,
+                  nationality: nationality,
                   hobby: hobby,
                   height: height,
                   colour: colour
@@ -211,7 +200,7 @@ end
 
 def output(student, index)
   puts "#{index + 1}. #{student[:name]} (#{student[:cohort]} cohort).".center(@line_width)
-  puts "Country: #{student[:country]}.".center(@line_width)
+  puts "Nationality: #{student[:nationality]}.".center(@line_width)
   puts "Hobby: #{student[:hobby]}.".center(@line_width)
   puts "Height (in metres): #{student[:height]}.".center(@line_width)
   puts "Colour: #{student[:colour]}.".center(@line_width)

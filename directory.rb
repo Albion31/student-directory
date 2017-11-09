@@ -1,21 +1,19 @@
 @students = []
 @line_width = 70
 
-
-
-def interactive_menu
-  loop do
-    print_menu
-    process(STDIN.gets.chomp)
-  end
-end
-
 def print_menu
   puts "1. Input the students."
   puts "2. Show the students."
   puts "3. Save the list to students.csv."
   puts "4. Load the list from students.csv."
   puts "9. Exit."
+end
+
+def interactive_menu
+  loop do
+    print_menu
+    process(STDIN.gets.chomp)
+  end
 end
 
 def process(selection)
@@ -60,13 +58,7 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, country, hobby, height, colour = line.chomp.split(",")
-    @students << {name: name,
-                  cohort: cohort.to_sym,
-                  country: country,
-                  hobby: hobby,
-                  height: height,
-                  colour: colour
-                 }
+    student_info(name, cohort, country, hobby, height, colour)
   end
   file.close
 end
@@ -74,7 +66,7 @@ end
 def try_load_students
   filename = ARGV.first
   return if filename.nil?
-  if File.exists?(filename)
+  if File.exist?(filename)
     load_students(filename)
     puts "Loaded #{@students.count} from #{filename}"
   else
@@ -117,13 +109,7 @@ def input_students
       if colour.empty?
         colour = "N/A"
       end
-    @students << {name: name,
-                  cohort: cohort.to_sym,
-                  country: country,
-                  hobby: hobby,
-                  height: height,
-                  colour: colour
-                 }
+      student_info(name, cohort, country, hobby, height, colour)
     @students.count <= 1 ? number = "student" : number = "students"
     puts "Now we have #{@students.count} #{number}."
     puts "Please enter the name of the next student."
@@ -209,6 +195,16 @@ def print_students_list
       puts "We have #{cohort_members.count} #{number} in the #{cohort_filter} cohort."
     end
   end
+end
+
+def student_info(name, cohort, country, hobby, height, colour)
+    @students << {name: name,
+                  cohort: cohort.to_sym,
+                  country: country,
+                  hobby: hobby,
+                  height: height,
+                  colour: colour
+                 }
 end
 
 def output(student, index)

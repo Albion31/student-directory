@@ -1,10 +1,12 @@
 @students = []
 @line_width = 70
 
+
+
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
@@ -54,8 +56,8 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort, country, hobby, height, colour = line.chomp.split(",")
     @students << {name: name,
@@ -69,37 +71,49 @@ def load_students
   file.close
 end
 
+def try_load_students
+  filename = ARGV.first
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+    puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry #{filename} doesn't exist"
+    exit
+  end
+end
+
 def input_students
   puts "Please enter the name of the first student."
-  name = gets.capitalize.delete("\n")
+  name = STDIN.gets.capitalize.delete("\n")
 
   while !name.empty? do
     cohort_month = ["January", "February", "March", "April",
                     "May", "June", "July", "August",
                     "September", "October", "November", "December"]
     puts "What is the student's cohort month?"
-    cohort = gets.chomp.capitalize
+    cohort = STDIN.gets.chomp.capitalize
       while !cohort_month.include?(cohort.capitalize)
         puts "Please enter a valid cohort month. The valid inputs are #{cohort_month.join(", ")}."
-        cohort = gets.chomp.capitalize
+        cohort = STDIN.gets.chomp.capitalize
       end
     puts "What is the student's country of birth?"
-    country = gets.chomp.capitalize
+    country = STDIN.gets.chomp.capitalize
       if country.empty?
         country = "N/A"
       end
     puts "What is the student's hobby?"
-    hobby = gets.chomp.capitalize
+    hobby = STDIN.gets.chomp.capitalize
       if hobby.empty?
         hobby = "N/A"
       end
     puts "What is the student's height in metres?"
-    height = gets.chomp
+    height = STDIN.gets.chomp
       if height.empty?
         height = "N/A"
       end
     puts "What is the student's favourite colour?"
-    colour = gets.chomp.capitalize
+    colour = STDIN.gets.chomp.capitalize
       if colour.empty?
         colour = "N/A"
       end
@@ -114,7 +128,7 @@ def input_students
     puts "Now we have #{@students.count} #{number}."
     puts "Please enter the name of the next student."
     puts "To finish, just hit return twice."
-    name = gets.chomp
+    name = STDIN.gets.chomp
   end
 
   @students
@@ -127,10 +141,10 @@ end
 
 def print_students_list
   puts "Do you want to filter the list of students?"
-  filter = gets.chomp
+  filter = STDIN.gets.chomp
   while filter != "yes" && filter != "no"
     puts "Please answer yes or no"
-    filter = gets.chomp
+    filter = STDIN.gets.chomp
   end
   if filter == "no"
     index = 0
@@ -143,14 +157,14 @@ def print_students_list
   elsif filter == "yes"
     puts "What would you like to fiter by?"
     puts "Please choose between \"first letter\", \"name length\" or \"cohort\""
-    filter_by = gets.chomp
+    filter_by = STDIN.gets.chomp
     while filter_by != "first letter" && filter_by != "name length" && filter_by != "cohort"
       puts "Please put choose between \"first letter\", \"name length\" or \"cohort\""
-      filter_by = gets.chomp
+      filter_by = STDIN.gets.chomp
     end
       if filter_by == "first letter"
         puts "Which letter would you like to filter the students name by?"
-        first_letter = gets.chomp.downcase
+        first_letter = STDIN.gets.chomp.downcase
         @students_first_letter = []
 
         @students.each_with_index do |student, index|
@@ -163,7 +177,7 @@ def print_students_list
           puts "We have #{@students_first_letter.count} #{number} whose name starts with \"#{first_letter}\"."
     elsif filter_by == "name length"
         puts "How many characters would you like the student's name to be lower than?"
-        characters = gets.chomp.to_i
+        characters = STDIN.gets.chomp.to_i
         @students_shorter_name = []
 
         @students.each_with_index do |student, index|
@@ -179,10 +193,10 @@ def print_students_list
                       "May", "June", "July", "August",
                       "September", "October", "November", "December"]
       puts "What cohort month would you like?"
-      cohort_filter = gets.chomp.capitalize
+      cohort_filter = STDIN.gets.chomp.capitalize
         while !cohort_month.include?(cohort_filter.capitalize)
           puts "Please enter a valid cohort month. The valid inputs are #{cohort_month.join(", ")}."
-          cohort_filter = gets.chomp.capitalize
+          cohort_filter = STDIN.gets.chomp.capitalize
         end
       cohort_members = []
       @students.each_with_index do |student, index|
@@ -211,4 +225,5 @@ def print_footer
     puts "Overall, we have #{@students.count} great #{number}."
 end
 
+try_load_students
 interactive_menu

@@ -1,3 +1,4 @@
+require "csv"
 @students = []
 @line_width = 70
 
@@ -46,7 +47,7 @@ def show_students
 end
 
 def save_students(filename = "students.csv")
-  file = File.open(filename, "w") do |file|
+  CSV.open(filename, "w") do |row|
     @students.each do |student|
       student_data = [student[:name],
                       student[:cohort],
@@ -54,19 +55,16 @@ def save_students(filename = "students.csv")
                       student[:hobby],
                       student[:height],
                       student[:colour]]
-      csv_line = student_data.join(",")
-      file.puts(csv_line)
+      row << student_data
     end
   end
 end
 
 def load_students(filename = "students.csv")
-  testing = File.open(filename, "r") do |file|
-    file.readlines.each do |line|
-      name, cohort, nationality, hobby, height, colour = line.chomp.split(",")
+    CSV.foreach(filename) do |line|
+      name, cohort, nationality, hobby, height, colour = line
       student_info(name, cohort, nationality, hobby, height, colour)
     end
-  end
 puts "#{@students.count} students have been loaded in total."
 end
 

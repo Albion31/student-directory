@@ -19,7 +19,7 @@ end
 def process(selection)
   case selection
     when "1"
-      puts "You have chosen to add a new student."
+      puts "You have chosen to add new students."
       input_students
     when "2"
       puts "You have chosen to show a list of students."

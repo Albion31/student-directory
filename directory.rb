@@ -19,17 +19,21 @@ end
 def process(selection)
   case selection
     when "1"
+      puts "You have chosen to add a new student."
       input_students
     when "2"
+      puts "You have chosen to show a list of students."
       show_students
     when "3"
+      puts "#{@students.count} students have been saved to the students.csv file."
       save_students
     when "4"
+      puts "Loaded #{@students.count} students."
       load_students
     when "9"
       exit
     else
-      puts "I don't know what you meant, try again."
+      puts "I don't know what you mean, try again."
   end
 end
 
@@ -61,6 +65,7 @@ def load_students(filename = "students.csv")
     student_info(name, cohort, nationality, hobby, height, colour)
   end
   file.close
+
 end
 
 def try_load_students

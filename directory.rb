@@ -1,6 +1,9 @@
 require "csv"
 @students = []
 @line_width = 70
+@cohort_month = ["January", "February", "March", "April",
+                "May", "June", "July", "August",
+                "September", "October", "November", "December"]
 
 def print_menu
   puts "1. Input the students."
@@ -32,7 +35,6 @@ def process(selection)
     when "4"
       puts "You have chosen to load students."
       load_students(specific_file)
-
     when "9"
       exit
     else
@@ -61,11 +63,11 @@ def save_students(filename = "students.csv")
 end
 
 def load_students(filename = "students.csv")
-    CSV.foreach(filename) do |line|
-      name, cohort, nationality, hobby, height, colour = line
-      student_info(name, cohort, nationality, hobby, height, colour)
-    end
-puts "#{@students.count} students have been loaded in total."
+  CSV.foreach(filename) do |line|
+    name, cohort, nationality, hobby, height, colour = line
+    student_info(name, cohort, nationality, hobby, height, colour)
+  end
+  puts "#{@students.count} students have been loaded in total."
 end
 
 def specific_file
@@ -88,12 +90,9 @@ end
 def input_students
   name = student_input("name").capitalize
   while !name.empty? do
-    cohort_month = ["January", "February", "March", "April",
-                    "May", "June", "July", "August",
-                    "September", "October", "November", "December"]
     cohort = student_input("cohort").capitalize
-      while !cohort_month.include?(cohort.capitalize)
-        puts "The valid inputs are #{cohort_month.join(", ")}."
+      while !@cohort_month.include?(cohort.capitalize)
+        puts "The valid inputs are #{@cohort_month.join(", ")}."
         cohort = student_input("cohort").capitalize
       end
     nationality = student_input("nationality").capitalize
@@ -133,7 +132,6 @@ def print_students_list
   end
   if filter == "no"
     index = 0
-
     until index == @students.length
       student = @students[index]
       output(student, index)
@@ -147,51 +145,12 @@ def print_students_list
       puts "Please put choose between \"first letter\", \"name length\" or \"cohort\""
       filter_by = STDIN.gets.chomp
     end
-      if filter_by == "first letter"
-        puts "Which letter would you like to filter the students name by?"
-        first_letter = STDIN.gets.chomp.downcase
-        @students_first_letter = []
-
-        @students.each_with_index do |student, index|
-          if student[:name].downcase.start_with?("#{first_letter}")
-            output(student, index)
-            @students_first_letter << student
-          end
-        end
-          @students_first_letter.count <= 1 ? number = "student" : number = "students"
-          puts "We have #{@students_first_letter.count} #{number} whose name starts with \"#{first_letter}\"."
+    if filter_by == "first letter"
+      first_letter_filter
     elsif filter_by == "name length"
-        puts "How many characters would you like the student's name to be lower than?"
-        characters = STDIN.gets.chomp.to_i
-        @students_shorter_name = []
-
-        @students.each_with_index do |student, index|
-          if student[:name].length < characters
-            output(student, index)
-            @students_shorter_name << student
-          end
-        end
-        @students_shorter_name.count <= 1 ? number = "student" : number = "students"
-        puts "We have #{@students_shorter_name.count} #{number} whose name is shorter than #{characters} characters."
+      length_filter
     elsif filter_by == "cohort"
-      cohort_month = ["January", "February", "March", "April",
-                      "May", "June", "July", "August",
-                      "September", "October", "November", "December"]
-      puts "What cohort month would you like?"
-      cohort_filter = STDIN.gets.chomp.capitalize
-        while !cohort_month.include?(cohort_filter.capitalize)
-          puts "Please enter a valid cohort month. The valid inputs are #{cohort_month.join(", ")}."
-          cohort_filter = STDIN.gets.chomp.capitalize
-        end
-      cohort_members = []
-      @students.each_with_index do |student, index|
-        if student[:cohort] == cohort_filter.capitalize.to_sym
-          output(student, index)
-          cohort_members << student
-        end
-      end
-      cohort_members.count <= 1 ? number = "student" : number = "students"
-      puts "We have #{cohort_members.count} #{number} in the #{cohort_filter} cohort."
+      cohort_filter
     end
   end
 end
@@ -204,6 +163,56 @@ def student_info(name, cohort, nationality, hobby, height, colour)
                   height: height,
                   colour: colour
                  }
+end
+
+def first_letter_filter
+  puts "Which letter would you like to filter the students name by?"
+  first_letter = STDIN.gets.chomp.downcase
+  @students_first_letter = []
+
+  @students.each_with_index do |student, index|
+    if student[:name].downcase.start_with?("#{first_letter}")
+      output(student, index)
+      @students_first_letter << student
+    end
+  end
+    @students_first_letter.count <= 1 ? number = "student" : number = "students"
+    puts "We have #{@students_first_letter.count} #{number} whose name starts with"
+end
+
+def length_filter
+  puts "How many characters would you like the student's name to be lower than?"
+  characters = STDIN.gets.chomp.to_i
+  @students_shorter_name = []
+  @students.each_with_index do |student, index|
+    if student[:name].length < characters
+      output(student, index)
+      @students_shorter_name << student
+    end
+  end
+  @students_shorter_name.count <= 1 ? number = "student" : number = "students"
+  puts "We have #{@students_shorter_name.count} #{number} whose name is shorter than #{characters} characters."
+end
+
+def cohort_filter
+  @cohort_month = ["January", "February", "March", "April",
+                  "May", "June", "July", "August",
+                  "September", "October", "November", "December"]
+  puts "What cohort month would you like?"
+  cohort_filter = STDIN.gets.chomp.capitalize
+    while !@cohort_month.include?(cohort_filter.capitalize)
+      puts "Please enter a valid cohort month. The valid inputs are #{@cohort_month.join(", ")}."
+      cohort_filter = STDIN.gets.chomp.capitalize
+    end
+  cohort_members = []
+  @students.each_with_index do |student, index|
+    if student[:cohort] == cohort_filter.capitalize.to_sym
+      output(student, index)
+      cohort_members << student
+    end
+  end
+  cohort_members.count <= 1 ? number = "student" : number = "students"
+  puts "We have #{cohort_members.count} #{number} in the #{cohort_filter} cohort."
 end
 
 def output(student, index)

@@ -4,6 +4,7 @@ require "csv"
 @cohort_month = ["January", "February", "March", "April",
                 "May", "June", "July", "August",
                 "September", "October", "November", "December"]
+@filter_by = ""
 
 def print_menu
   puts "1. Input the students."
@@ -105,7 +106,6 @@ def input_students
     puts "Just hit return to finish, otherwise please enter the name of the next student."
     name = STDIN.gets.chomp
   end
-
   @students
 end
 
@@ -113,7 +113,7 @@ def student_input(personal_info)
   puts "Please enter the #{personal_info} of the student."
   answer = STDIN.gets.chomp
   if answer.empty?
-    answer = "Not given"
+    answer = "Not given."
   end
   answer
 end
@@ -127,29 +127,22 @@ def print_students_list
   puts "Do you want to filter the list of students?"
   filter = STDIN.gets.chomp
   while filter != "yes" && filter != "no"
-    puts "Please answer yes or no"
+    puts "Please answer yes or no."
     filter = STDIN.gets.chomp
   end
   if filter == "no"
-    index = 0
-    until index == @students.length
-      student = @students[index]
-      output(student, index)
-      index += 1
-    end
+    no_filter
   elsif filter == "yes"
     puts "What would you like to fiter by?"
-    puts "Please choose between \"first letter\", \"name length\" or \"cohort\""
-    filter_by = STDIN.gets.chomp
-    while filter_by != "first letter" && filter_by != "name length" && filter_by != "cohort"
-      puts "Please put choose between \"first letter\", \"name length\" or \"cohort\""
-      filter_by = STDIN.gets.chomp
+    filter_choice
+    while @filter_by != "first letter" && @filter_by != "name length" && @filter_by != "cohort"
+      filter_choice
     end
-    if filter_by == "first letter"
+    if @filter_by == "first letter"
       first_letter_filter
-    elsif filter_by == "name length"
+    elsif @filter_by == "name length"
       length_filter
-    elsif filter_by == "cohort"
+    elsif @filter_by == "cohort"
       cohort_filter
     end
   end
@@ -161,15 +154,27 @@ def student_info(name, cohort, nationality, hobby, height, colour)
                   nationality: nationality,
                   hobby: hobby,
                   height: height,
-                  colour: colour
-                 }
+                  colour: colour}
+end
+
+def no_filter
+  index = 0
+  until index == @students.length
+    student = @students[index]
+    output(student, index)
+    index += 1
+  end
+end
+
+def filter_choice
+  puts "Please put choose between \"first letter\", \"name length\" or \"cohort\"."
+  @filter_by = STDIN.gets.chomp
 end
 
 def first_letter_filter
   puts "Which letter would you like to filter the students name by?"
   first_letter = STDIN.gets.chomp.downcase
   @students_first_letter = []
-
   @students.each_with_index do |student, index|
     if student[:name].downcase.start_with?("#{first_letter}")
       output(student, index)
@@ -195,9 +200,6 @@ def length_filter
 end
 
 def cohort_filter
-  @cohort_month = ["January", "February", "March", "April",
-                  "May", "June", "July", "August",
-                  "September", "October", "November", "December"]
   puts "What cohort month would you like?"
   cohort_filter = STDIN.gets.chomp.capitalize
     while !@cohort_month.include?(cohort_filter.capitalize)

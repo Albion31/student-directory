@@ -25,11 +25,12 @@ def process(selection)
       puts "You have chosen to show a list of students."
       show_students
     when "3"
-      puts "#{@students.count} students have been saved to the students.csv file."
-      save_students
+      puts "You have chosen to save students."
+      save_students(specific_file)
+      puts "#{@students.count} students have been saved to the file."
     when "4"
-      puts "Loaded #{@students.count} students."
-      load_students
+      puts "You have chosen to load students."
+      load_students(specific_file)
     when "9"
       exit
     else
@@ -43,8 +44,8 @@ def show_students
   print_footer
 end
 
-def save_students
-  file = File.open("students.csv", "w")
+def save_students(filename = "students.csv")
+  file = File.open(filename, "w")
   @students.each do |student|
     student_data = [student[:name],
                     student[:cohort],
@@ -64,18 +65,22 @@ def load_students(filename = "students.csv")
     name, cohort, nationality, hobby, height, colour = line.chomp.split(",")
     student_info(name, cohort, nationality, hobby, height, colour)
   end
+  puts "#{@students.count} students have been loaded in total."
   file.close
 
+end
+
+def specific_file
+  puts "Please choose a file."
+  filename = STDIN.gets.chomp
 end
 
 def try_load_students
   filename = ARGV.first
   if filename.nil?
     load_students
-    puts "Loaded #{@students.count} from the default file."
   elsif File.exist?(filename)
     load_students(filename)
-    puts "Loaded #{@students.count} from #{filename}."
   else
     puts "Sorry #{filename} doesn't exist."
     exit

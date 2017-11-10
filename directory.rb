@@ -31,6 +31,7 @@ def process(selection)
     when "4"
       puts "You have chosen to load students."
       load_students(specific_file)
+
     when "9"
       exit
     else
@@ -45,29 +46,28 @@ def show_students
 end
 
 def save_students(filename = "students.csv")
-  file = File.open(filename, "w")
-  @students.each do |student|
-    student_data = [student[:name],
-                    student[:cohort],
-                    student[:nationality],
-                    student[:hobby],
-                    student[:height],
-                    student[:colour]]
-    csv_line = student_data.join(",")
-    file.puts(csv_line)
+  file = File.open(filename, "w") do |file|
+    @students.each do |student|
+      student_data = [student[:name],
+                      student[:cohort],
+                      student[:nationality],
+                      student[:hobby],
+                      student[:height],
+                      student[:colour]]
+      csv_line = student_data.join(",")
+      file.puts(csv_line)
+    end
   end
-  file.close
 end
 
 def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, cohort, nationality, hobby, height, colour = line.chomp.split(",")
-    student_info(name, cohort, nationality, hobby, height, colour)
+  testing = File.open(filename, "r") do |file|
+    file.readlines.each do |line|
+      name, cohort, nationality, hobby, height, colour = line.chomp.split(",")
+      student_info(name, cohort, nationality, hobby, height, colour)
+    end
   end
-  puts "#{@students.count} students have been loaded in total."
-  file.close
-
+puts "#{@students.count} students have been loaded in total."
 end
 
 def specific_file

@@ -185,7 +185,7 @@ def first_letter_filter
     end
   end
     @students_first_letter.count <= 1 ? number = "student" : number = "students"
-    puts "We have #{@students_first_letter.count} #{number} whose name starts with"
+    puts "We have #{@students_first_letter.count} #{number} whose name starts with \"#{first_letter}\"."
 end
 
 def length_filter

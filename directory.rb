@@ -7,11 +7,14 @@ require "csv"
 @filter_by = ""
 
 def print_menu
+  puts ""
+  puts "What would you like to do?"
   puts "1. Input the students."
   puts "2. Show the students."
   puts "3. Save the list to students.csv."
   puts "4. Load the list from students.csv."
   puts "9. Exit."
+  puts "Please input a number."
 end
 
 def interactive_menu
@@ -127,7 +130,7 @@ def print_students_list
   puts "Do you want to filter the list of students?"
   filter = STDIN.gets.chomp
   while filter != "yes" && filter != "no"
-    puts "Please answer yes or no."
+    puts "Please answer \"yes\" or \"no\"."
     filter = STDIN.gets.chomp
   end
   if filter == "no"

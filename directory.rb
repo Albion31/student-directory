@@ -26,23 +26,23 @@ end
 
 def process(selection)
   case selection
-    when "1"
-      puts "You have chosen to add new students."
-      input_students
-    when "2"
-      puts "You have chosen to show a list of students."
-      show_students
-    when "3"
-      puts "You have chosen to save students."
-      save_students(specific_file)
-      puts "#{@students.count} students have been saved to the file."
-    when "4"
-      puts "You have chosen to load students."
-      load_students(specific_file)
-    when "9"
-      exit
-    else
-      puts "I don't know what you mean, try again."
+  when "1"
+    puts "You have chosen to add new students."
+    input_students
+  when "2"
+    puts "You have chosen to show a list of students."
+    show_students
+  when "3"
+    puts "You have chosen to save students."
+    save_students(specific_file)
+    puts "#{@students.count} students have been saved to the file."
+  when "4"
+    puts "You have chosen to load students."
+    load_students(specific_file)
+  when "9"
+    exit(0)
+  else
+    puts "I don't know what you mean, try again."
   end
 end
 
@@ -55,12 +55,14 @@ end
 def save_students(filename = "students.csv")
   CSV.open(filename, "w") do |row|
     @students.each do |student|
-      student_data = [student[:name],
-                      student[:cohort],
-                      student[:nationality],
-                      student[:hobby],
-                      student[:height],
-                      student[:colour]]
+      student_data = [
+        student[:name],
+        student[:cohort],
+        student[:nationality],
+        student[:hobby],
+        student[:height],
+        student[:colour]
+      ]
       row << student_data
     end
   end
@@ -87,7 +89,7 @@ def try_load_students
     load_students(filename)
   else
     puts "Sorry #{filename} doesn't exist."
-    exit
+    exit(1)
   end
 end
 
@@ -152,12 +154,14 @@ def print_students_list
 end
 
 def student_info(name, cohort, nationality, hobby, height, colour)
-    @students << {name: name,
-                  cohort: cohort.to_sym,
-                  nationality: nationality,
-                  hobby: hobby,
-                  height: height,
-                  colour: colour}
+    @students << {
+      name: name,
+      cohort: cohort.to_sym,
+      nationality: nationality,
+      hobby: hobby,
+      height: height,
+      colour: colour
+    }
 end
 
 def no_filter
@@ -180,12 +184,12 @@ def first_letter_filter
   @students_first_letter = []
   @students.each_with_index do |student, index|
     if student[:name].downcase.start_with?("#{first_letter}")
-      output(student, index)
-      @students_first_letter << student
+    output(student, index)
+    @students_first_letter << student
     end
   end
-    @students_first_letter.count <= 1 ? number = "student" : number = "students"
-    puts "We have #{@students_first_letter.count} #{number} whose name starts with \"#{first_letter}\"."
+  @students_first_letter.count <= 1 ? number = "student" : number = "students"
+  puts "We have #{@students_first_letter.count} #{number} whose name starts with \"#{first_letter}\"."
 end
 
 def length_filter
@@ -231,7 +235,7 @@ end
 
 def print_footer
   @students.count <= 1 ? number = "student" : number = "students"
-    puts "Overall, we have #{@students.count} great #{number}."
+  puts "Overall, we have #{@students.count} great #{number}."
 end
 
 try_load_students
